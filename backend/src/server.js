@@ -1,8 +1,10 @@
+import cookieParser from "cookie-parser"
 import dotenv from "dotenv"
 import express from "express"
 import { connectDB } from "./libs/db.js"
+import { protectedRoute } from "./middlewares/authMiddleware.js"
 import authRoute from "./routes/authRoute.js"
-import cookieParser from "cookie-parser"
+import userRoute from "./routes/userRoute.js"
 
 dotenv.config()
 
@@ -17,6 +19,8 @@ app.use(cookieParser())
 app.use("/api/auth", authRoute)
 
 //private route
+app.use(protectedRoute)
+app.use("/api/users", userRoute)
 
 //connect to db
 connectDB().then(() => {
