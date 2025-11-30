@@ -48,4 +48,11 @@ export const authService = {
     );
     return response.data;
   },
+
+  fetchMe: async () => {
+    const response = await api.get("/users/me", {
+      withCredentials: true,
+    });
+    return response.data;
+  },
 };
