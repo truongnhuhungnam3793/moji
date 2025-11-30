@@ -3,17 +3,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { z } from "zod";
 
 const signinSchema = z.object({
   username: z.string().min(1, "Vui lòng nhập tên đăng nhập"),
-  password: z.string().min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
+  password: z.string().min(6, "Mật khẩu phải có ít nhất 8 ký tự"),
 });
 type SigninFormValues = z.infer<typeof signinSchema>;
 
 const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
+  const { signIn } = useAuthStore();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -26,8 +31,11 @@ const SigninForm = ({ className, ...props }: React.ComponentProps<"div">) => {
     },
   });
 
-  const onSubmit = (data: SigninFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: SigninFormValues) => {
+    const { username, password } = data;
+    await signIn(username, password);
+
+    navigate("/");
   };
 
   return (

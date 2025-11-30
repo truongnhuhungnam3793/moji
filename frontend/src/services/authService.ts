@@ -23,4 +23,18 @@ export const authService = {
     );
     return response.data;
   },
+
+  signIn: async (username: string, password: string) => {
+    const response = await api.post(
+      "/auth/signin",
+      {
+        username,
+        password,
+      },
+      {
+        withCredentials: true,
+      },
+    );
+    return response.data;
+  },
 };
