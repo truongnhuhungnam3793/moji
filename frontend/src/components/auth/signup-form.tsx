@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const signupSchema = z.object({
   firstname: z
@@ -22,9 +22,9 @@ const signupSchema = z.object({
     .max(3, "Tên đăng nhập phải có ít nhất 3 ký tự"),
   email: z.email("Vui lòng nhập email hợp lệ"),
   password: z.string().min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
-})
+});
 
-type SignupFormValues = z.infer<typeof signupSchema>
+type SignupFormValues = z.infer<typeof signupSchema>;
 
 export function SignupForm({
   className,
@@ -43,11 +43,11 @@ export function SignupForm({
       email: "",
       password: "",
     },
-  })
+  });
 
   const onSubmit = (data: SignupFormValues) => {
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -56,7 +56,7 @@ export function SignupForm({
           <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
               {/* header - logo */}
-              <div className="flex flex-col items-center text-center gap-2">
+              <div className="flex flex-col items-center gap-2 text-center">
                 <a href="/" className="mx-auto block w-fit text-center">
                   <img src="/logo.svg" alt="logo" />
                 </a>
@@ -169,10 +169,10 @@ export function SignupForm({
           </div>
         </CardContent>
       </Card>
-      <div className=" text-xs text-balance px-6 text-center *:[a]:hover:text-primary text-muted-foreground *:[a]:underline *:[a]:underline-offetset-4">
+      <div className="*:[a]:hover:text-primary text-muted-foreground *:[a]:underline-offetset-4 p-6 text-center text-xs text-balance *:[a]:underline">
         Bằng cách tiếp tục, bạn đồng ý với <a href="#">Điều khoản dịch vụ</a> và{" "}
         <a href="#">Chính sách bảo mật</a> của chúng tôi.
       </div>
     </div>
-  )
+  );
 }
