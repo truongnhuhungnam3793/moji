@@ -3,25 +3,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { z } from "zod";
 
 const signupSchema = z.object({
-  firstname: z
-    .string()
-    .min(1, "Vui lòng nhập tên")
-    .max(50, "Tên phải có ít nhất 1 ký tự"),
-  lastname: z
-    .string()
-    .min(1, "Vui lòng nhập họ")
-    .max(50, "Họ phải có ít nhất 1 ký tự"),
-  username: z
-    .string()
-    .min(1, "Vui lòng nhập tên đăng nhập")
-    .max(3, "Tên đăng nhập phải có ít nhất 3 ký tự"),
+  firstname: z.string().min(1, "Vui lòng nhập tên"),
+  lastname: z.string().min(1, "Vui lòng nhập họ"),
+  username: z.string().min(1, "Vui lòng nhập tên đăng nhập"),
   email: z.email("Vui lòng nhập email hợp lệ"),
-  password: z.string().min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
+  password: z.string().min(6, "Mật khẩu phải có ít nhất 8 ký tự"),
 });
 
 type SignupFormValues = z.infer<typeof signupSchema>;
@@ -30,6 +23,9 @@ export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { signUp } = useAuthStore();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -45,8 +41,11 @@ export function SignupForm({
     },
   });
 
-  const onSubmit = (data: SignupFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: SignupFormValues) => {
+    const { firstname, lastname, username, email, password } = data;
+
+    await signUp(username, email, password, firstname, lastname);
+    navigate("/signin");
   };
 
   return (
