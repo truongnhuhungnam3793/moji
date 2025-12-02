@@ -113,3 +113,38 @@ export const signOut = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" })
   }
 }
+
+export const refresh = async (req, res) => {
+  try {
+    const token = req.cookies.refreshToken
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" })
+    }
+
+    const session = await Session.findOne({ refreshToken: token })
+
+    if (!session) {
+      return res.status(401).json({ message: "Unauthorized" })
+    }
+
+    if (session.expiresAt < Date.now()) {
+      return res.status(403).json({ message: "Expired token" })
+    }
+
+    const accessToken = jwt.sign(
+      { userId: session.userId },
+      // @ts-ignore
+      process.env.JWT_SECRET,
+      { expiresIn: token_ttl }
+    )
+
+    return res.status(200).json({
+      message: "User signed in successfully",
+      accessToken,
+    })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: "Internal server error" })
+  }
+}

@@ -3,6 +3,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 
 const ChatApp = () => {
   const user = useAuthStore((state) => state.user);
+  console.log(user);
 
   return (
     <div>
